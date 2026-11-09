@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harbor Hopper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="logo-pill" aria-label="Harbor Hopper">
+      <svg class="logo-art" viewBox="0 0 96 64" aria-hidden="true">
+        <circle cx="80" cy="14" r="9" fill="#FFD43B" stroke="#F59F00" stroke-width="2"/>
+        <path d="M76 13.5q1.2 1 2.4 0M81.6 13.5q1.2 1 2.4 0" stroke="#7a4a00" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M77 17q3 3 6 0" stroke="#7a4a00" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <line x1="40" y1="8" x2="40" y2="24" stroke="#5c6b7a" stroke-width="2.2"/>
+        <path d="M40 8l13 4-13 4z" fill="#FF6B6B"/>
+        <rect x="26" y="24" width="32" height="14" rx="4" fill="#FFD43B" stroke="#E8A400" stroke-width="2"/>
+        <rect x="31" y="28" width="6" height="5" rx="1.5" fill="#74C0FC"/><rect x="39" y="28" width="6" height="5" rx="1.5" fill="#74C0FC"/><rect x="47" y="28" width="6" height="5" rx="1.5" fill="#74C0FC"/>
+        <path d="M10 38h74l-9 14H19z" fill="#fff" stroke="#2b4a66" stroke-width="2.4" stroke-linejoin="round"/>
+        <circle cx="30" cy="45" r="2" fill="#2b4a66"/><circle cx="42" cy="45" r="2" fill="#2b4a66"/><circle cx="54" cy="45" r="2" fill="#2b4a66"/>
+        <path d="M4 57q6-4 12 0t12 0 12 0 12 0 12 0 12 0 12 0" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span class="wordmark">Harbor Hopper</span>
+    </div>
+    <div class="toolbar">
+      <span class="pill loc" id="locPill" title="Location">📍 Locating…</span>
+      <span class="pill" id="updatedPill">Updated —</span>
+      <button class="btn refresh" id="refreshBtn" type="button">Refresh</button>
+      <button class="btn gear" id="gearBtn" type="button" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.7 7.7 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.7 7.7 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1L11 21h4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5zM13 15.5A3.5 3.5 0 1 1 13 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Routes">
+    <button role="tab" id="tab-tab1" data-tab="tab1" aria-selected="true">…</button>
+    <button role="tab" id="tab-tab2" data-tab="tab2" aria-selected="false">…</button>
+    <button role="tab" id="tab-custom" data-tab="custom" aria-selected="false">Custom</button>
+  </nav>
+
+  <main id="main">
+    <section class="custom-pick" id="customPick" hidden>
+      <label>From <select id="cFrom" aria-label="Custom from"></select></label>
+      <button class="btn swap" id="swapBtn" type="button" aria-label="Swap from and to" title="Swap">⇅</button>
+      <label>To <select id="cTo" aria-label="Custom to"></select></label>
+    </section>
+
+    <section class="card" id="topCard" aria-live="polite">
+      <p class="muted">Checking which routes exist…</p>
+    </section>
+
+    <section class="sched" id="sched" aria-labelledby="schedTitle">
+      <div class="sched-head">
+        <h2 id="schedTitle">Full timetable · official schedule</h2>
+        <div class="seg" role="group" aria-label="Day type">
+          <button type="button" data-day="weekday" aria-pressed="true">Weekday</button>
+          <button type="button" data-day="weekend" aria-pressed="false">Weekend</button>
+        </div>
+      </div>
+      <div id="schedBody"></div>
+    </section>
+  </main>
+
+  <footer class="foot" id="foot">
+    <span id="boardLink"></span>
+    <span id="fare">Fares vary by route.</span>
+    <a href="https://www.nywaterway.com/" target="_blank" rel="noopener">Route &amp; schedules at nywaterway.com</a>
+  </footer>
+
+  <div class="modal-wrap" id="modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle">Your home route</h2>
+      <label class="switch-row">
+        <span>Round trip</span>
+        <input type="checkbox" id="rtToggle" role="switch" checked>
+        <span class="switch" aria-hidden="true"></span>
+      </label>
+      <div id="rtOn">
+        <label>From <select id="sFrom"></select></label>
+        <label>To <select id="sTo"></select></label>
+        <p class="hint" id="rtHint"></p>
+      </div>
+      <div id="rtOff" hidden>
+        <fieldset><legend>Tab 1 · Outbound</legend>
+          <label>From <select id="s1From"></select></label>
+          <label>To <select id="s1To"></select></label>
+        </fieldset>
+        <fieldset><legend>Tab 2 · Return</legend>
+          <label>From <select id="s2From"></select></label>
+          <label>To <select id="s2To"></select></label>
+        </fieldset>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" id="resetBtn">Reset to default</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn ghost" id="cancelBtn">Cancel</button>
+        <button type="button" class="btn primary" id="saveBtn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
